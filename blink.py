@@ -11,3 +11,11 @@ time.sleep(1)
 print "LED off N" + str(pinout) + " " + color
 GPIO.output(pinout,GPIO.LOW)
 time.sleep(1)
+
+try:
+  GPIO.output(pinout,GPIO.HIGH)
+  time.sleep(1)
+  print "LED off N" + str(pinout) + " " + color
+  GPIO.output(pinout,GPIO.LOW)
+  time.sleep(1)
+  
