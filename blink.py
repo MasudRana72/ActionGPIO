@@ -1,21 +1,16 @@
-import RPi.GPIO as GPIO
-import time
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-pinout = 18
-color = "Yellow"
-GPIO.setup(pinout,GPIO.OUT)
-#print "LED on N" + str(pinout) + " " + color
-GPIO.output(pinout,GPIO.HIGH)
-time.sleep(1)
-#print "LED off N" + str(pinout) + " " + color
-GPIO.output(pinout,GPIO.LOW)
-time.sleep(1)
+import RPi.GPIO as GPIO         # Import Raspberry Pi GPIO library
+from time import sleep          # Import the sleep function 
 
-try:
-  GPIO.output(pinout,GPIO.HIGH)
-  time.sleep(1)
-  #print "LED off N" + str(pinout) + " " + color
-  GPIO.output(pinout,GPIO.LOW)
-  time.sleep(1)
-  
+pinLED = 4                      # LED GPIO Pin
+
+GPIO.setmode(GPIO.BCM)          # Use GPIO pin number
+GPIO.setwarnings(False)         # Ignore warnings in our case
+GPIO.setup(pinLED, GPIO.OUT)    # GPIO pin as output pin
+
+while True:                          # Endless Loop
+    GPIO.output(pinLED, GPIO.HIGH)   # Turn on
+    print(LED on)                    # Prints state to console
+    sleep(1)                         # Pause 1 second
+    GPIO.output(pinLED, GPIO.LOW)    # Turn off
+    print(LED off)                   # Prints state to console
+    sleep(1)      
