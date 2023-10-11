@@ -18,6 +18,5 @@ jobs:
       - name: Run a one-line script
         run: |
           echo Hello raspberry!
-          # Add a step to run your shell script on the Raspberry Pi
-          ssh masud@raspberrypi:~/actions-runner && ./run.sh"
+          
 
