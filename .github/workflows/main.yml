@@ -19,5 +19,5 @@ jobs:
         run: |
           echo Hello raspberry!
           # Add a step to run your shell script on the Raspberry Pi
-          ssh masud@raspberry-pi-ip "cd /path/to/your/repository && ./run.sh"
+          ssh masud@raspberrypi:~/actions-runner && ./run.sh"
 
