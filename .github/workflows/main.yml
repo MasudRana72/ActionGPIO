@@ -1,13 +1,15 @@
-name: Auto-update Raspberry Pi
+name: CI
 
 on:
   push:
-    branches:
-      - main  # Change this to match your branch namegg
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  update_raspberry_pi:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: self-hosted
 
     steps:
       - name: Set up Node.js
@@ -15,8 +17,10 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Checkout code
+      - name: Check out the repository
         uses: actions/checkout@v2
+        with:
+          node-version: '16'  # Set Node.js version for the checkout action
 
       - name: SSH into Raspberry Pi and update
         uses: appleboy/ssh-action@v1.0.0
