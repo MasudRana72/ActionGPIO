@@ -25,5 +25,6 @@ jobs:
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
           script: |
             cd ~/actions-runner/_work/ActionGPIO/ActionGPIO
+            ls -l    # List files in the directory for debugging
             git pull
             python blink.py
