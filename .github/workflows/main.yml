@@ -20,6 +20,7 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
 
-      - name: Run a one-line script
+      - name: Run your Python program
         run: |
-          echo Hello raspberry!
+          cd /home/masud/actions-runner/_work/ActionGPIO/ActionGPIO  # Change this to your Python program's directory
+          sudo python3 blink.py  # Replace with the actual command to run your Python program
