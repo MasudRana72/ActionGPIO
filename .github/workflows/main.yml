@@ -15,20 +15,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: 16
 
       - name: Check out the repository
         uses: actions/checkout@v2
-        with:
-          node-version: '16'  # Set Node.js version for the checkout action
 
-      - name: SSH into Raspberry Pi and update
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: raspberrypi
-          username: masud
-          key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
-          script: |
-            cd ~/actions-runner/_work/ActionGPIO/ActionGPIO
-            git pull
-            python your_program.py
+      - name: Run a one-line script
+        run: |
+          echo Hello raspberry!
