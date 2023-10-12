@@ -23,4 +23,4 @@ jobs:
       - name: Run your Python program
         run: |
           cd /home/masud/actions-runner/_work/ActionGPIO/ActionGPIO  # Change this to your Python program's directory
-          sudo python3 blink.py  # Replace with the actual command to run your Python program
+          timeout 1m sudo python3 blink.py  # Replace with the actual command to run your Python program
