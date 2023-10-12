@@ -20,7 +20,6 @@ jobs:
       - name: SSH into Raspberry Pi and update
         uses: appleboy/ssh-action@v1.0.0
         with:
-          node-version: 16
           host: raspberrypi
           username: masud
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
