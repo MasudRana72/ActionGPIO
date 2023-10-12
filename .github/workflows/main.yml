@@ -1,31 +1,25 @@
-name: Auto-update Raspberry Pi
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  update_raspberry_pi:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: self-hosted
 
     steps:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16  # Use Node.js version 16
+          node-version: 16
 
-      - name: Checkout code
+      - name: Check out the repository
         uses: actions/checkout@v2
 
-      - name: SSH into Raspberry Pi and update
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: raspberrypi  # Replace with your Raspberry Pi's hostname or IP address
-          username: masud  # Replace with your Raspberry Pi's username
-          key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
-          script: |
-            cd ~/actions-runner/_work/ActionGPIO/ActionGPIO
-            git pull
-            python your_program.py  # Replace 'your_program.py' with your actual Python script filename
+      - name: Run a one-line script
+        run: |
+          echo Hello raspberry!
