@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: SSH into Raspberry Pi and update
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: raspberrypi  # Replace with your Raspberry Pi's hostname or IP address
           username: masud  # Replace with your Raspberry Pi's username
