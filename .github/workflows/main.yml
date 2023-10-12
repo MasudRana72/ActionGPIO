@@ -20,8 +20,19 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
 
-      - name: Run a one-line script
+      - name: Create a flag file
+        if: success()
+        run: touch /tmp/reboot-flag
+  reboot:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Wait for flag file
         run: |
-          echo Hello raspberry!
+          while [ ! -f /tmp/reboot-flag ]; do
+            sleep 5
+          done
+      - name: Reboot Raspberry Pi
+        run: sudo reboot
 
   
