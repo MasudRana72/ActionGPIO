@@ -3,7 +3,7 @@ name: Auto-update Raspberry Pi
 on:
   push:
     branches:
-      - main  # Change this to match your branch name
+      - main  # Change this to match your branch namegg
 
 jobs:
   update_raspberry_pi:
