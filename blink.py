@@ -10,7 +10,7 @@ GPIO.setup(pinLED, GPIO.OUT)    # GPIO pin as output pin
 while True:                          # Endless Loop
     GPIO.output(pinLED, GPIO.HIGH)   # Turn on
     #print(LED on)                    # Prints state to console
-    sleep(2)                         # Pause 1 second
+    sleep(0.5)                         # Pause 1 second
     GPIO.output(pinLED, GPIO.LOW)    # Turn off
     #print(LED off)                   # Prints state to console
-    sleep(1)      
+    sleep(0.51)      
