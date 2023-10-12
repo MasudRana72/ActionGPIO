@@ -20,7 +20,12 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
 
-      - name: Run your Python program
+      - name: Run a one-line script
         run: |
-          cd /home/masud/actions-runner/_work/ActionGPIO/ActionGPIO  # Change this to your Python program's directory
-          sudo python3 runnercode.py  # Replace with the actual command to run your
+          echo Hello raspberry!
+      - name: Delay for a few seconds
+        run: sleep 120  # Adjust the delay time as needed
+      
+      - name: Reboot on success
+        if: success()
+        run: sudo reboot
