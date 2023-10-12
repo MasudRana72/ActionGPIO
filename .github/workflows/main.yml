@@ -26,4 +26,5 @@ jobs:
       
       - name: Reboot on success
         if: success()
-        run: sudo reboot
+        run: |
+          sudo reboot
