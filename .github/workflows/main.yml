@@ -23,9 +23,3 @@ jobs:
       - name: Run a one-line script
         run: |
           echo Hello raspberry!
-      - name: Delay for a few seconds
-        run: sleep 120  # Adjust the delay time as needed
-      
-      - name: Reboot on success
-        if: success()
-        run: sudo reboot
