@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO         # Import Raspberry Pi GPIO library
 from time import sleep          # Import the sleep function 
-
+#Hellow Masud
 pinLED = 4                      # LED GPIO Pin
 
 GPIO.setmode(GPIO.BCM)          # Use GPIO pin number
