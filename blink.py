@@ -1,16 +1,37 @@
-import RPi.GPIO as GPIO         # Import Raspberry Pi GPIO library
-from time import sleep          # Import the sleep function 
-#Hellow Masud watchdog test 
-pinLED = 4                      # LED GPIO Pin
+import os
+import sys
+import RPi.GPIO as GPIO
+from time import sleep
 
-GPIO.setmode(GPIO.BCM)          # Use GPIO pin number
-GPIO.setwarnings(False)         # Ignore warnings in our case
-GPIO.setup(pinLED, GPIO.OUT)    # GPIO pin as output pin
+lock_file = "/tmp/my_program.lock"
+#masud
+try:
+    # Check if the lock file exists
+    if os.path.exists(lock_file):
+        # Terminate the previous instance
+        with open(lock_file, 'r') as f:
+            pid = int(f.read())
+            os.system(f"kill {pid}")
 
-while True:                          # Endless Loop
-    GPIO.output(pinLED, GPIO.HIGH)   # Turn on
-    #print(LED on)                    # Prints state to console
-    sleep(5)                         # Pause 1 second
-    GPIO.output(pinLED, GPIO.LOW)    # Turn off
-    #print(LED off)                   # Prints state to console
-    sleep(3)      
+    # Create a new lock file with the current process ID
+    with open(lock_file, 'w') as f:
+        f.write(str(os.getpid()))
+
+    # Your main program logic here
+    pinLED = 4
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    GPIO.setup(pinLED, GPIO.OUT)
+
+    while True:
+        GPIO.output(pinLED, GPIO.HIGH)
+        print("LED on")
+        sleep(0.5)
+        GPIO.output(pinLED, GPIO.LOW)
+        print("LED off")
+        sleep(0.5)
+
+
+finally:
+    # Remove the lock file when the program exits (both normally and due to exceptions)
+    os.remove(lock_file)
