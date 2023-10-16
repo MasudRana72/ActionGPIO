@@ -3,7 +3,7 @@ import sys
 import RPi.GPIO as GPIO
 from time import sleep
 
-lock_file = "/tmp/my_program.lock"
+lock_file = "/tmp/blink.lock"
 #masud
 try:
     # Check if the lock file exists
