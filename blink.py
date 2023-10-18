@@ -26,10 +26,10 @@ try:
     while True:
         GPIO.output(pinLED, GPIO.HIGH)
         print("LED on")
-        sleep(0.1)
+        sleep(2)
         GPIO.output(pinLED, GPIO.LOW)
         print("LED off")
-        sleep(0.1)
+        sleep(2)
 
 
 finally:
