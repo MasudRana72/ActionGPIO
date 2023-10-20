@@ -10,7 +10,7 @@
 ##    A02>> 7LED per segment(Not Tested yet 10102023)<Tested, UV not OK>
 ##    A03>> loop running using while, no error handle message. Backup, GitAction, SSH control.
 ##    A04>> auto kill feature added
-##    auto reboot test run: 10/20 17:00 
+##    auto reboot test run: 10/20 17:00 me
 ##   Code written by: Masud Rana(rana1603072@gmail.com)
 ## ################################
 import os
