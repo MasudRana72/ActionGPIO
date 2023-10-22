@@ -50,7 +50,7 @@ brightness_Set = 255;
 
 # Create a NeoPixel object with the appropriate configuration.
 strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-somethin    a 
+
 # Initialize the library (must be called once before other functions).
 strip.begin() 
 print("Test beginning ✅")
