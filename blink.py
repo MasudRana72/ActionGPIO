@@ -17,14 +17,14 @@ import os
 import sys
 import RPi.GPIO as GPIO
 ##Beacon GPIO 
-green_beacon = 18
+green_beacon = 12
 yellow_beacon = 9
 red_beacon = 11
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(green_beacon, GPIO.OUT)    # green_beacon pin as output pin
+GPIO.setup(18, GPIO.OUT)    # green_beacon pin as output pin
 GPIO.setup(yellow_beacon, GPIO.OUT)   # yellow_beacon pin as output pin
 GPIO.setup(red_beacon, GPIO.OUT)      # red_beacon pin as output pin
-GPIO.output(green_beacon, GPIO.LOW)   # Turn off green_beacon
+GPIO.output(18, GPIO.LOW)   # Turn off green_beacon
 GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
 from time import sleep
