@@ -17,7 +17,7 @@ import os
 import sys
 import RPi.GPIO as GPIO
 ##Beacon GPIO 
-green_beacon = 12
+green_beacon = 18
 yellow_beacon = 9
 red_beacon = 11
 GPIO.setmode(GPIO.BCM)
@@ -40,7 +40,7 @@ import xml.etree.ElementTree as ET
 from rpi_ws281x import PixelStrip, Color
 # LED strip configuration:
 LED_COUNT = 99*4        # Number of LED pixels.
-LED_PIN = 18          # GPIO pin connected to the pixels (18 uses PWM!).
+LED_PIN = 12          # GPIO pin connected to the pixels (18 uses PWM!).
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 10          # DM A channel to use for generating a signal (try 10)
 LED_BRIGHTNESS = 255   # Set to 0 for darkest and 255 for brightest
