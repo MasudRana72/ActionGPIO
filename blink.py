@@ -68,9 +68,9 @@ def check_internet_connection():
     except subprocess.CalledProcessError:
         return False
 
-while not check_internet_connection():
-    print("No internet connection. Retrying in 5 seconds...")
-    time.sleep(5)
+#while not check_internet_connection():
+#    print("No internet connection. Retrying in 5 seconds...")
+#    time.sleep(5)
 
 print("Internet connection established!")
 
