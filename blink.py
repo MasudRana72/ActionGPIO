@@ -251,6 +251,7 @@ def get_data():
     Rain_chance = float(probability_of_precipitation.rstrip('%'))
     print("Air Temperature Maximum:", air_temperature_maximum)
     Forecast_temp= float(air_temperature_maximum)
+def weatherzone_data():
     #####
     ##LIGHTNING DATA FETCHING FROM WEATHERZONE.COM
     #######
