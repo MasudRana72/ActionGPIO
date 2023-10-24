@@ -1,5 +1,5 @@
 ####################################
-##   **Smart Weather Warning Station
+##   **Smart Weather Warning Station**
 ##   **Rubix Design and Engineering
 ##    WeatherStationFirmware_REV_A01.py(09052023DDMMYY)
 ##    Current temp,forecast temp, chance of rain is taken from BoM FTP server(no legal problem)
