@@ -392,6 +392,7 @@ try:
       check_internet_connection()
       #get_data() 
       #get_uvindex()
+      print("weatherzonedata")
       weatherzone_data()
       schedule.run_pending()
       print(datetime.now()) 
