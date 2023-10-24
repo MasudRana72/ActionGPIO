@@ -387,7 +387,7 @@ try:
     i=1
     while i>0:
       print("RGB RUnning")
-      rgb_test()
+      #rgb_test()
       check_internet_connection()
       get_data() 
       #get_uvindex()
