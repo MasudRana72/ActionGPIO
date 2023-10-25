@@ -46,7 +46,7 @@ LED_DMA = 10          # DM A channel to use for generating a signal (try 10)
 LED_BRIGHTNESS = 255   # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False     # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
-brightness_Set = 255;
+brightness_Set = 150;
 
 # Create a NeoPixel object with the appropriate configuration.
 strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
@@ -157,19 +157,19 @@ def rgb_test():
   while True:
     for i in range(strip.numPixels()):
       # red led ✅
-      strip.setPixelColor(i, Color(255, 0, 0))
+      strip.setPixelColor(i, Color(150, 0, 0))
       strip.show()
       sleep(0.1)
     sleep(0.1)
     for i in range(strip.numPixels()):
       # green led ✅
-      strip.setPixelColor(i, Color(0, 255, 0))
+      strip.setPixelColor(i, Color(0, 150, 0))
       strip.show()
       sleep(0.1)
     sleep(0.1)
     for i in range(strip.numPixels()):
       # blue led ✅
-      strip.setPixelColor(i, Color(0, 0, 255))
+      strip.setPixelColor(i, Color(0, 0, 150))
       strip.show()
       sleep(0.1)
     sleep(0.1)
