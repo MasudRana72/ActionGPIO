@@ -157,19 +157,7 @@ def rgb_test():
   while True:
     for i in range(strip.numPixels()):
       # red led ✅
-      strip.setPixelColor(i, Color(150, 0, 0))
-      strip.show()
-      sleep(0.1)
-    sleep(0.1)
-    for i in range(strip.numPixels()):
-      # green led ✅
-      strip.setPixelColor(i, Color(0, 150, 0))
-      strip.show()
-      sleep(0.1)
-    sleep(0.1)
-    for i in range(strip.numPixels()):
-      # blue led ✅
-      strip.setPixelColor(i, Color(0, 0, 150))
+      strip.setPixelColor(i, Color(100, 100, 0))
       strip.show()
       sleep(0.1)
     sleep(0.1)
