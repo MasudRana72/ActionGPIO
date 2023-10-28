@@ -1,7 +1,7 @@
 ####################################
-##   **Smart Weather Warning Station**
+##   **Smart Weather Warning Station
 ##   **Rubix Design and Engineering
-##    WeatherStationFirmware_REV_A01.py(09052023DDMMYY)##AA
+##    WeatherStationFirmware_REV_A01.py(09052023DDMMYY)
 ##    Current temp,forecast temp, chance of rain is taken from BoM FTP server(no legal problem)
 ##    UV index taken from ARPANSA using webscrapin(check Terms and Conditions, all ok)
 ##    LIGHTNING DATA FETCHING FROM WEATHERZONE.COM
@@ -10,23 +10,25 @@
 ##    A02>> 7LED per segment(Not Tested yet 10102023)<Tested, UV not OK>
 ##    A03>> loop running using while, no error handle message. Backup, GitAction, SSH control.
 ##    A04>> auto kill feature added
-##    auto reboot test run: 10/20 17:00 me
-##   Code written by: Masud Rana(rana1603072@gmail.com)
+##    auto reboot test run: 10/20 17:00 
+##    Code written by: Masud Rana(rana1603072@gmail.com)
 ## ################################
 import os
 import sys
 import RPi.GPIO as GPIO
 ##Beacon GPIO 
-green_beacon = 18
+green_beacon = 10
 yellow_beacon = 9
 red_beacon = 11
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(18, GPIO.OUT)    # green_beacon pin as output pin
+GPIO.setup(green_beacon, GPIO.OUT)    # green_beacon pin as output pin
 GPIO.setup(yellow_beacon, GPIO.OUT)   # yellow_beacon pin as output pin
 GPIO.setup(red_beacon, GPIO.OUT)      # red_beacon pin as output pin
-GPIO.output(18, GPIO.LOW)   # Turn off green_beacon
+GPIO.output(green_beacon, GPIO.LOW)   # Turn off green_beacon
 GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
+#GPIO.output(18, GPIO.OUT)  # Turn off yellow_beacon
+#GPIO.output(18, GPIO.LOW)     # Turn off red_beacon
 from time import sleep
 import time
 from datetime import datetime, timedelta
@@ -39,20 +41,20 @@ from io import BytesIO
 import xml.etree.ElementTree as ET
 from rpi_ws281x import PixelStrip, Color
 # LED strip configuration:
-LED_COUNT = 99*4        # Number of LED pixels.
-LED_PIN = 12          # GPIO pin connected to the pixels (18 uses PWM!).
+LED_COUNT = 396       # Number of LED pixels.
+LED_PIN = 12          # GPIO pin connected to the pixels (12 uses PWM!).
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 10          # DM A channel to use for generating a signal (try 10)
 LED_BRIGHTNESS = 255   # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False     # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
-brightness_Set = 150;
+brightness_Set = 255;
 
 # Create a NeoPixel object with the appropriate configuration.
 strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
 
 # Initialize the library (must be called once before other functions).
-strip.begin() 
+strip.begin()
 print("Test beginning ✅")
 import subprocess
 #import sys
@@ -68,9 +70,9 @@ def check_internet_connection():
     except subprocess.CalledProcessError:
         return False
 
-#while not check_internet_connection():
-#    print("No internet connection. Retrying in 5 seconds...")
-#    time.sleep(5)
+while not check_internet_connection():
+    print("No internet connection. Retrying in 5 seconds...")
+    time.sleep(5)
 
 print("Internet connection established!")
 
@@ -113,14 +115,24 @@ def send_Data(value,d1_pos,d2_pos):
         d_2 = int(digits[1])
         print(d_1)
         print(d_2)
-        for i in range(d1_pos,(d2_pos-1)):
-            a = get_bit(digit[d_1], (i-d1_pos)) * brightness_Set
-            strip.setPixelColor(i, Color(a, 0, 0))
-        strip.setPixelColor(d2_pos-1, Color(brightness_Set, 0, 0))
-        for i in range(d2_pos,d2_pos+49):
-            a = get_bit(digit[d_2], (i - d2_pos)) * brightness_Set
-            strip.setPixelColor(i, Color(a, 0, 0))
-        #strip.show()
+        if d_2 == 0 :
+            for i in range(d1_pos,(d2_pos-1)):
+                a = get_bit(digit[d_2], (i-d1_pos)) * brightness_Set
+                strip.setPixelColor(i, Color(a, 0, 0))
+            strip.setPixelColor(d2_pos-1, Color(0, 0, 0))
+            for i in range(d2_pos,d2_pos+49):
+                a = get_bit(digit[d_1], (i - d2_pos)) * brightness_Set
+                strip.setPixelColor(i, Color(a, 0, 0))
+            
+        else:
+            for i in range(d1_pos,(d2_pos-1)):
+                a = get_bit(digit[d_1], (i-d1_pos)) * brightness_Set
+                strip.setPixelColor(i, Color(a, 0, 0))
+            strip.setPixelColor(d2_pos-1, Color(brightness_Set, 0, 0))
+            for i in range(d2_pos,d2_pos+49):
+                a = get_bit(digit[d_2], (i - d2_pos)) * brightness_Set
+                strip.setPixelColor(i, Color(a, 0, 0))
+            #strip.show()
     elif value > 0:
         value = round(value)
         d_1 = value // 10
@@ -155,12 +167,13 @@ def clear_buffer():
 def rgb_test():
   # print("strip.numPixels() =", strip.numPixels())
   while True:
-    for i in range(strip.numPixels()):
+    for i in range(396):
       # red led ✅
-      strip.setPixelColor(i, Color(200, 0, 0))#
+      strip.setPixelColor(i, Color(0, 150, 0))
       strip.show()
-      sleep(0.1)
+      sleep(0.05)
     sleep(0.1)
+    
 
 
 def get_data():
@@ -252,7 +265,7 @@ def weatherzone_data():
             day, month, year = map(int, today.split('/'))
             #print(day)
             key = str(day * 2 + month * 100 * 3 + year * 10000 * 17) + str(weatherzone_password)
-            print(key)
+            #print(key)
             m = hashlib.md5()
             m.update(key.encode('utf-8'))
             i = int.from_bytes(m.digest(), byteorder='big')
@@ -261,7 +274,7 @@ def weatherzone_data():
 
         return key
     generated_key = generate_key(weatherzone_password)
-    print(generated_key)
+    #print(generated_key)
     url_weatherzone = url_weatherzone +"&u=" + weatherzone_userid + "&k=" +generated_key
     response = requests.get(url_weatherzone)
     if response.status_code == 200:
@@ -359,6 +372,7 @@ def main():
 weatherstation_lock_file = "/tmp/weatherstation.lock"
 
 try:
+    main()
     # Check if the lock file exists
     if os.path.exists(weatherstation_lock_file):
         # Terminate the previous instance
@@ -374,15 +388,16 @@ try:
     update_uv_index()
   
     i=1
+    #while i>0:
+        
     while i>0:
-      print("RGB Running")
+      print("RGB RUnning")
       rgb_test()
-      #check_internet_connection()
+      check_internet_connection()
       #get_data() 
       #get_uvindex()
-      print("weatherzonedata")
+      #schedule.run_pending()
       #weatherzone_data()
-      schedule.run_pending()
       print(datetime.now()) 
       print("First Digit Current_temp:")
       print(Current_temp)
@@ -401,3 +416,4 @@ try:
 finally:
     # Remove the lock file when the program exits (both normally and due to exceptions)
     os.remove(weatherstation_lock_file)
+
