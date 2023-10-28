@@ -1,7 +1,7 @@
 ####################################
 ##   **Smart Weather Warning Station
 ##   **Rubix Design and Engineering
-##    WeatherStationFirmware_REV_A01.py(09052023DDMMYY)
+##    WeatherStationFirmware_REV_A01.py(09052023DDMMYY)ssss
 ##    Current temp,forecast temp, chance of rain is taken from BoM FTP server(no legal problem)
 ##    UV index taken from ARPANSA using webscrapin(check Terms and Conditions, all ok)
 ##    LIGHTNING DATA FETCHING FROM WEATHERZONE.COM
