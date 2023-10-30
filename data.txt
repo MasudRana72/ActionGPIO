@@ -1,8 +1,1 @@
-Watchdog test auto reboot ip address : 192.168.1.109
- 
-testing system after reboot, test2
-
-final test after reboot
-
-was it rebooted??
-This is the text you want to write to the log file.This is the text you want to write to the log file.
+This is the text you want to write to the log file.
