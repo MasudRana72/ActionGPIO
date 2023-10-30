@@ -1,7 +1,7 @@
 ####################################
 ##   **Smart Weather Warning Station
 ##   **Rubix Design and Engineering
-##    WeatherStationFirmware_REV_A01.py(09052023DDMMYY)ssss
+##    WeatherStationFirmware_REV_A01.py(09052023DDMMYY)
 ##    Current temp,forecast temp, chance of rain is taken from BoM FTP server(no legal problem)
 ##    UV index taken from ARPANSA using webscrapin(check Terms and Conditions, all ok)
 ##    LIGHTNING DATA FETCHING FROM WEATHERZONE.COM
@@ -10,7 +10,7 @@
 ##    A02>> 7LED per segment(Not Tested yet 10102023)<Tested, UV not OK>
 ##    A03>> loop running using while, no error handle message. Backup, GitAction, SSH control.
 ##    A04>> auto kill feature added
-##    auto reboot test run: 10/20 17:00 
+##    auto reboot test run: 10/28 17:00 
 ##    Code written by: Masud Rana(rana1603072@gmail.com)
 ## ################################
 import os
@@ -180,68 +180,79 @@ def get_data():
     global Current_temp
     global Forecast_temp
     global Rain_chance
+    max_retries = 3  # Maximum number of connection retries
+    retry_delay = 5  # Delay in seconds between retries
     
-    
-    ####################################
-    #
-    # FTP server details
-    #
-    ###############################
-    ftp_host = "ftp.bom.gov.au"
-    ftp_dir = "/anon/gen/fwo"
-    ftp_file = "IDW14104.xml"#Forecast Newman IDW14104
-    ftp_file_current_temp = "IDW60920.xml"#Cureent Temperature
+    for retry in range(max_retries):
+        try:
+            ####################################
+            #
+            # FTP server details
+            #
+            ###############################
+            ftp_host = "ftp.bom.gov.au"
+            ftp_dir = "/anon/gen/fwo"
+            ftp_file = "IDW14104.xml"#Forecast Newman IDW14104
+            ftp_file_current_temp = "IDW60920.xml"#Cureent Temperature
+            # Create an FTP connection
+            ftp = FTP(ftp_host)
+            ftp.login()  # For anonymous access
 
+            # Change to the appropriate directory on the FTP server
+            ftp.cwd(ftp_dir)
 
-    # Create an FTP connection
-    ftp = FTP(ftp_host)
-    ftp.login()  # For anonymous access
+            # Initialize a BytesIO object to store the file's contents in-memory
+            file_data = BytesIO()
+            file_data_ct = BytesIO()
 
-    # Change to the appropriate directory on the FTP server
-    ftp.cwd(ftp_dir)
+            # Retrieve the file and store its contents in the BytesIO object
+            ftp.retrbinary("RETR " + ftp_file, file_data.write)
+            ftp.retrbinary("RETR " + ftp_file_current_temp, file_data_ct.write)
 
-    # Initialize a BytesIO object to store the file's contents in-memory
-    file_data = BytesIO()
-    file_data_ct = BytesIO()
+            # Rewind the BytesIO object to the beginning of the data
+            file_data.seek(0)
+            file_data_ct.seek(0)
 
-    # Retrieve the file and store its contents in the BytesIO object
-    ftp.retrbinary("RETR " + ftp_file, file_data.write)
-    ftp.retrbinary("RETR " + ftp_file_current_temp, file_data_ct.write)
+            # Close the FTP connection
+            ftp.quit()
 
-    # Rewind the BytesIO object to the beginning of the data
-    file_data.seek(0)
-    file_data_ct.seek(0)
+            # Now you can process the data in-memory
+            file_contents = file_data.read().decode("utf-8")
+            file_contents_ct = file_data_ct.read().decode("utf-8")
 
-    # Close the FTP connection
-    ftp.quit()
+            # Parse the XML data
+            root = ET.fromstring(file_contents)
+            root_ct = ET.fromstring(file_contents_ct)
 
-    # Now you can process the data in-memory
-    file_contents = file_data.read().decode("utf-8")
-    file_contents_ct = file_data_ct.read().decode("utf-8")
+            # Find the forecast-period for location
+            perth_forecast_period = root.find(".//area[@aac='WA_PT014']")#perth location code.
+            perth_ct = root_ct.find(".//station[@wmo-id='99312']")#COONDEWANNA location code.#Cureent Temperature
 
-    # Parse the XML data
-    root = ET.fromstring(file_contents)
-    root_ct = ET.fromstring(file_contents_ct)
-
-    # Find the forecast-period for location
-    perth_forecast_period = root.find(".//area[@aac='WA_PT014']")#perth location code.
-    perth_ct = root_ct.find(".//station[@wmo-id='99312']")#COONDEWANNA location code.#Cureent Temperature
-
-    # Extract the 'probability_of_precipitation' and 'air_temperature_maximum' values
-    try:
-        probability_of_precipitation = perth_forecast_period.find(".//text[@type='probability_of_precipitation']").text
+            # Extract the 'probability_of_precipitation' and 'air_temperature_maximum' values
+            try:
+                probability_of_precipitation = perth_forecast_period.find(".//text[@type='probability_of_precipitation']").text
         
-    except AttributeError:
-        probability_of_precipitation = "N/A"
+            except AttributeError:
+                probability_of_precipitation = "N/A"
 
-    try:
-        air_temperature_maximum = perth_forecast_period.find(".//element[@type='air_temperature_maximum']").text
-    except AttributeError:
-        air_temperature_maximum = "N/A"
-    try:
-       current_temp = perth_ct.find(".//element[@type='air_temperature']").text
-    except AttributeError:
-        current_temp = "N/A"
+            try:
+                air_temperature_maximum = perth_forecast_period.find(".//element[@type='air_temperature_maximum']").text
+            except AttributeError:
+                air_temperature_maximum = "N/A"
+            try:
+               current_temp = perth_ct.find(".//element[@type='air_temperature']").text
+            except AttributeError:
+                current_temp = "N/A"
+            break
+         except socket.gaierror as e:
+            if retry < max_retries - 1:
+                print(f"FTP connection failed. Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+            else:
+                print(f"Max retries reached. Unable to connect.")
+                log_entry(f"FTP connection failed after {max_retries} retries: {e}")
+                # Continue with the rest of the program
+                break  # Exit the loop without re-raising the exception
 
     # Print the extracted values
     
@@ -309,7 +320,6 @@ def weatherzone_data():
                 print("No alert with status=\"CLEAR\" found in the XML.")
 
     else:
-        log_entry("Failed to retrieve data. Status code: {response.status_code}")
         print(f"Failed to retrieve data. Status code: {response.status_code}")
 
 ###########
@@ -345,7 +355,6 @@ def fetch_uv_index():
         else:
             print(f'Error: Unable to retrieve data. Status Code: {response.status_code}')
     except requests.exceptions.RequestException as e:
-        log_entry(e)
         print(f'Error: {e}')
 
     return None  # Return None in case of errors
@@ -373,7 +382,7 @@ def main():
 
 weatherstation_lock_file = "/tmp/weatherstation.lock"
 # Specify the path to your log file
-log_file_path = "/home/masud/actions-runner/_work/ActionGPIO/ActionGPIO/data.txt"
+log_file_path = "/home/rubixdesign/actions-runner/_work/ActionGPIO/ActionGPIO/log.txt"
 
 def log_entry(text_to_write):
     with open(log_file_path, "a") as log_file:
@@ -401,12 +410,11 @@ try:
     #while i>0:
         
     while i>0:
-      print("RGB RUnning")
+      #print("RGB Running")
       #rgb_test()
       check_internet_connection()
-      #get_data() 
-      #get_uvindex()
-      #schedule.run_pending()
+      get_data() 
+      schedule.run_pending()
       weatherzone_data()
       print(datetime.now()) 
       print("First Digit Current_temp:")
@@ -422,8 +430,7 @@ try:
       print(uv_index_accu)
       send_Data(uv_index_accu,297,347) # digit group 4
       strip.show()
-      sleep(30)
+      sleep(300)
 finally:
     # Remove the lock file when the program exits (both normally and due to exceptions)
     os.remove(weatherstation_lock_file)
-
