@@ -244,7 +244,7 @@ def get_data():
             except AttributeError:
                 current_temp = "N/A"
             break
-         except socket.gaierror as e:
+        except socket.gaierror as e:
             if retry < max_retries - 1:
                 print(f"FTP connection failed. Retrying in {retry_delay} seconds...")
                 time.sleep(retry_delay)
