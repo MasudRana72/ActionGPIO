@@ -309,6 +309,7 @@ def weatherzone_data():
                 print("No alert with status=\"CLEAR\" found in the XML.")
 
     else:
+        log_entry("Failed to retrieve data. Status code: {response.status_code}")
         print(f"Failed to retrieve data. Status code: {response.status_code}")
 
 ###########
@@ -344,6 +345,7 @@ def fetch_uv_index():
         else:
             print(f'Error: Unable to retrieve data. Status Code: {response.status_code}')
     except requests.exceptions.RequestException as e:
+        log_entry(e)
         print(f'Error: {e}')
 
     return None  # Return None in case of errors
@@ -370,6 +372,14 @@ def main():
 #LOOP FUNCTION 
 
 weatherstation_lock_file = "/tmp/weatherstation.lock"
+# Specify the path to your log file
+log_file_path = "/home/masud/actions-runner/_work/ActionGPIO/ActionGPIO/data.txt"
+
+def log_entry(text_to_write):
+    with open(log_file_path, "a") as log_file:
+        # Write the text to the file
+        log_file.write(text_to_write)
+    log_file.close()
 
 try:
     main()
