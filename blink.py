@@ -404,7 +404,7 @@ try:
         f.write(str(os.getpid()))
     #rgb_test()
     #main()
-    update_uv_index()
+    #update_uv_index()
   
     i=1
     #while i>0:
@@ -414,8 +414,8 @@ try:
       #rgb_test()
       check_internet_connection()
       get_data() 
-      schedule.run_pending()
-      weatherzone_data()
+      #schedule.run_pending()
+      #weatherzone_data()
       print(datetime.now()) 
       print("First Digit Current_temp:")
       print(Current_temp)
