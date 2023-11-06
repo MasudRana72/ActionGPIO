@@ -291,6 +291,10 @@ def weatherzone_data():
                 GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
                 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
                 GPIO.output(green_beacon, GPIO.HIGH)   # Turn ON green_beacon
+                canvas.delete(bg_imageR)
+                canvas.delete(bg_imageY)
+                canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageG) # GREEN 
+                
                 print(f"Status attribute value: {status_value}")
                 break  # Stop searching once a "CLEAR" status is found
             elif status_value == "APPROACHING":
@@ -432,6 +436,7 @@ window = tk.Tk()
 window.title("SMART WEATHER WARNING STATION")
 
 # Load the background image
+bg_imageN = PhotoImage(file="/home/masud/weatherboard1024x514N.png")
 bg_imageR = PhotoImage(file="/home/masud/weatherboard1024x514R.png")
 bg_imageY = PhotoImage(file="/home/masud/weatherboard1024x514Y.png")
 bg_imageG = PhotoImage(file="/home/masud/weatherboard1024x514G.png")
@@ -443,7 +448,7 @@ canvas = tk.Canvas(window, width=image_width, height=image_height)
 canvas.pack()
 
 # Display the background image
-canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageG)
+canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageN)
 
 # Create labels with the formatted variables
 labels = [
