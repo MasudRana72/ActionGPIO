@@ -470,7 +470,7 @@ canvas = tk.Canvas(window, width=image_width, height=image_height)
 canvas.pack()
 
 # Display the background image
-canvas.create_image(0, 0, anchor=tk.NW, image=bg_image)
+canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageG)
 
 # Create labels with the formatted variables
 labels = [
