@@ -1,6 +1,6 @@
 from time import sleep
 import time
-time.sleep(50)
+#time.sleep(50)
 import tkinter as tk
 from tkinter import PhotoImage
 
