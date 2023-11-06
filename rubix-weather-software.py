@@ -291,9 +291,9 @@ def weatherzone_data():
                 GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
                 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
                 GPIO.output(green_beacon, GPIO.HIGH)   # Turn ON green_beacon
-                #canvas.delete(bg_imageR)
-                #canvas.delete(bg_imageY)
-                #canvas.delete(bg_imageN)
+                canvas.delete(bg_imageR)
+                canvas.delete(bg_imageY)
+                canvas.delete(bg_imageN)
                 canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageG) # GREEN 
                 
                 print(f"Status attribute value: {status_value}")
@@ -302,12 +302,20 @@ def weatherzone_data():
                 GPIO.output(green_beacon, GPIO.LOW)   # Turn off green_beacon
                 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
                 GPIO.output(yellow_beacon, GPIO.HIGH)  # Turn ON yellow_beacon
+                canvas.delete(bg_imageR)
+                canvas.delete(bg_imageY)
+                canvas.delete(bg_imageN)
+                canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageY) # YELLOW
                 print(f"Status attribute value: {status_value}")
                 break  # Stop searching once a "CLEAR" status is found
             elif status_value == "IMMINENT":
                 GPIO.output(green_beacon, GPIO.LOW)   # Turn off green_beacon
                 GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
                 GPIO.output(red_beacon, GPIO.HIGH)     # Turn ON red_beacon
+                canvas.delete(bg_imageR)
+                canvas.delete(bg_imageY)
+                canvas.delete(bg_imageN)
+                canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageR) # RED
                 print(f"Status attribute value: {status_value}")
                 break  # Stop searching once a "CLEAR" status is found
             else:
@@ -449,7 +457,7 @@ canvas = tk.Canvas(window, width=image_width, height=image_height)
 canvas.pack()
 
 # Display the background image
-canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageR)
+canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageN)
 
 # Create labels with the formatted variables
 labels = [
