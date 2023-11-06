@@ -422,38 +422,11 @@ def update_weather_and_leds():
     send_Data(uv_index_accu, 198, 248)  # Update digit group 3
     send_Data(Rain_chance, 297, 347)  # Update digit group 4
     strip.show()
-    #Shadow warning
-    # Define the parameters for the shadowed rounded rectangle
-    my_rectangle = round_rectangle(50, 50, 150, 100, radius=20, fill="gray80")
     # Schedule the next update in 5 minutes
     window.after(300000, update_weather_and_leds)
 
 
-def round_rectangle(x1, y1, x2, y2, radius=25, **kwargs):
-        
-    points = [x1+radius, y1,
-              x1+radius, y1,
-              x2-radius, y1,
-              x2-radius, y1,
-              x2, y1,
-              x2, y1+radius,
-              x2, y1+radius,
-              x2, y2-radius,
-              x2, y2-radius,
-              x2, y2,
-              x2-radius, y2,
-              x2-radius, y2,
-              x1+radius, y2,
-              x1+radius, y2,
-              x1, y2,
-              x1, y2-radius,
-              x1, y2-radius,
-              x1, y1+radius,
-              x1, y1+radius,
-              x1, y1]
 
-    return canvas.create_polygon(points, **kwargs, smooth=True)
-    
 # Create a Tkinter window
 window = tk.Tk()
 window.title("SMART WEATHER WARNING STATION")
