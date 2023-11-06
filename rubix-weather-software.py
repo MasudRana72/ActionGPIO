@@ -408,7 +408,7 @@ with open(weatherstation_lock_file, 'w') as f:
 def update_weather_and_leds():
     #get_data()
     #update_uv_index()
-    weatherzone_data()
+    #weatherzone_data()
 
     # Assuming you have the values in Current_temp, Forecast_temp, uv_index_accu, and Rain_chance
 
