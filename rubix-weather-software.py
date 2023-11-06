@@ -291,8 +291,9 @@ def weatherzone_data():
                 GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
                 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
                 GPIO.output(green_beacon, GPIO.HIGH)   # Turn ON green_beacon
-                canvas.delete(bg_imageR)
-                canvas.delete(bg_imageY)
+                #canvas.delete(bg_imageR)
+                #canvas.delete(bg_imageY)
+                #canvas.delete(bg_imageN)
                 canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageG) # GREEN 
                 
                 print(f"Status attribute value: {status_value}")
