@@ -1,3 +1,6 @@
+from time import sleep
+import time
+time.sleep(50)
 import tkinter as tk
 from tkinter import PhotoImage
 
@@ -18,8 +21,7 @@ GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
 #GPIO.output(18, GPIO.OUT)  # Turn off yellow_beacon
 #GPIO.output(18, GPIO.LOW)     # Turn off red_beacon
-from time import sleep
-import time
+
 from datetime import datetime, timedelta
 import schedule
 import requests
@@ -45,7 +47,6 @@ strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRI
 # Initialize the library (must be called once before other functions).
 strip.begin()
 print("Test beginning ✅")
-time.sleep(120)
 import subprocess
 #import sys
 #sys.path.insert(0,'/home/masud/.local/lib/python3.9/site-packages')
