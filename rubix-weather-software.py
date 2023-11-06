@@ -45,6 +45,7 @@ strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRI
 # Initialize the library (must be called once before other functions).
 strip.begin()
 print("Test beginning ✅")
+time.sleep(120)
 import subprocess
 #import sys
 #sys.path.insert(0,'/home/masud/.local/lib/python3.9/site-packages')
