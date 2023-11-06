@@ -408,7 +408,6 @@ def update_weather_and_leds():
     forecast_temp_text = "{:.1f}".format(Forecast_temp) if Forecast_temp < 10 else "{:.0f}".format(Forecast_temp)
     uv_index_text = "{:.1f}".format(uv_index_accu) if uv_index_accu < 10 else "{:.0f}".format(uv_index_accu)
     rain_chance_text = "{:.1f}".format(Rain_chance) if Rain_chance < 10 else "{:.0f}".format(Rain_chance)
-    canvas.create_rectangle(50, 50, 80, 80, fill="gray")
 
     # Update labels with the new values
     labels[0].config(text=current_temp_text)
@@ -425,45 +424,46 @@ def update_weather_and_leds():
     strip.show()
     #Shadow warning
     # Define the parameters for the shadowed rounded rectangle
-    x = 50
-    y = 50
-    width = 300
-    height = 100
-    corner_radius = 20
-    shadow_offset = 10
-    shadow_color = "gray"
-
-    # Create the shadowed rounded rectangle using lines
-    create_shadowed_rounded_rectangle(canvas, x, y, width, height, corner_radius, shadow_offset, shadow_color)
+    my_rectangle = round_rectangle(50, 50, 150, 100, radius=20, fill="gray80")
     # Schedule the next update in 5 minutes
     window.after(300000, update_weather_and_leds)
 
 
-def create_shadowed_rounded_rectangle(canvas, x, y, width, height, corner_radius, shadow_offset, shadow_color):
-    # Create the shadowed rounded rectangle using lines
-    x1 = x
-    y1 = y
-    x2 = x + width
-    y2 = y + height
-    canvas.create_line(x1+corner_radius , y1, x2 - corner_radius, y1, fill=shadow_color)
-    canvas.create_line(x2, y1 + corner_radius, x2, y2 - corner_radius, fill=shadow_color)
-    canvas.create_line(x1 + corner_radius, y2, x2 - corner_radius, y2, fill=shadow_color)
-    canvas.create_line(x1, y1 + corner_radius, x1, y2 - corner_radius, fill=shadow_color)
+def round_rectangle(x1, y1, x2, y2, radius=25, **kwargs):
+        
+    points = [x1+radius, y1,
+              x1+radius, y1,
+              x2-radius, y1,
+              x2-radius, y1,
+              x2, y1,
+              x2, y1+radius,
+              x2, y1+radius,
+              x2, y2-radius,
+              x2, y2-radius,
+              x2, y2,
+              x2-radius, y2,
+              x2-radius, y2,
+              x1+radius, y2,
+              x1+radius, y2,
+              x1, y2,
+              x1, y2-radius,
+              x1, y2-radius,
+              x1, y1+radius,
+              x1, y1+radius,
+              x1, y1]
 
-    # Create the rounded corners for the main rectangle
-    canvas.create_arc(x1, y1, x1 + 2 * corner_radius, y1 + 2 * corner_radius, start=90, extent=90, style=tk.ARC)
-    canvas.create_arc(x2 - 2 * corner_radius, y1, x2, y1 + 2 * corner_radius, start=0, extent=90, style=tk.ARC)
-    canvas.create_arc(x1, y2 - 2 * corner_radius, x1 + 2 * corner_radius, y2, start=180, extent=90, style=tk.ARC)
-    canvas.create_arc(x2 - 2 * corner_radius, y2 - 2 * corner_radius, x2, y2, start=270, extent=90, style=tk.ARC)
+    return canvas.create_polygon(points, **kwargs, smooth=True)
     
 # Create a Tkinter window
 window = tk.Tk()
 window.title("SMART WEATHER WARNING STATION")
 
 # Load the background image
-bg_image = PhotoImage(file="/home/masud/weatherboard.png")
-image_width = bg_image.width()
-image_height = bg_image.height()
+bg_imageR = PhotoImage(file="/home/masud/weatherboard1024x514R.png")
+bg_imageY = PhotoImage(file="/home/masud/weatherboard1024x514Y.png")
+bg_imageG = PhotoImage(file="/home/masud/weatherboard1024x514G.png")
+image_width = bg_imageR.width()
+image_height = bg_imageR.height()
 
 # Create a canvas to display the background image
 canvas = tk.Canvas(window, width=image_width, height=image_height)
