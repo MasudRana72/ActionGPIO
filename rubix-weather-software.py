@@ -423,10 +423,39 @@ def update_weather_and_leds():
     send_Data(uv_index_accu, 198, 248)  # Update digit group 3
     send_Data(Rain_chance, 297, 347)  # Update digit group 4
     strip.show()
+    #Shadow warning
+    # Define the parameters for the shadowed rounded rectangle
+    x = 50
+    y = 50
+    width = 300
+    height = 100
+    corner_radius = 20
+    shadow_offset = 10
+    shadow_color = "gray"
+
+    # Create the shadowed rounded rectangle using lines
+    create_shadowed_rounded_rectangle(canvas, x, y, width, height, corner_radius, shadow_offset, shadow_color)
     # Schedule the next update in 5 minutes
     window.after(300000, update_weather_and_leds)
 
 
+def create_shadowed_rounded_rectangle(canvas, x, y, width, height, corner_radius, shadow_offset, shadow_color):
+    # Create the shadowed rounded rectangle using lines
+    x1 = x
+    y1 = y
+    x2 = x + width
+    y2 = y + height
+    canvas.create_line(x1+corner_radius , y1, x2 - corner_radius, y1, fill=shadow_color)
+    canvas.create_line(x2, y1 + corner_radius, x2, y2 - corner_radius, fill=shadow_color)
+    canvas.create_line(x1 + corner_radius, y2, x2 - corner_radius, y2, fill=shadow_color)
+    canvas.create_line(x1, y1 + corner_radius, x1, y2 - corner_radius, fill=shadow_color)
+
+    # Create the rounded corners for the main rectangle
+    canvas.create_arc(x1, y1, x1 + 2 * corner_radius, y1 + 2 * corner_radius, start=90, extent=90, style=tk.ARC)
+    canvas.create_arc(x2 - 2 * corner_radius, y1, x2, y1 + 2 * corner_radius, start=0, extent=90, style=tk.ARC)
+    canvas.create_arc(x1, y2 - 2 * corner_radius, x1 + 2 * corner_radius, y2, start=180, extent=90, style=tk.ARC)
+    canvas.create_arc(x2 - 2 * corner_radius, y2 - 2 * corner_radius, x2, y2, start=270, extent=90, style=tk.ARC)
+    
 # Create a Tkinter window
 window = tk.Tk()
 window.title("SMART WEATHER WARNING STATION")
