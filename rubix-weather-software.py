@@ -1,8 +1,9 @@
 from time import sleep
 import time
-#time.sleep(50)
+time.sleep(30)
 import tkinter as tk
 from tkinter import PhotoImage
+from pyvirtualdisplay import Display
 
 # ... (Rest of your imports and LED configuration code)
 import os
@@ -407,18 +408,21 @@ with open(weatherstation_lock_file, 'w') as f:
     f.write(str(os.getpid()))
     
 # Create a function to update the weather data and LEDs
+main()
+update_uv_index()
 def update_weather_and_leds():
-    #get_data()
+    get_data()
     #update_uv_index()
-    #weatherzone_data()
+    schedule.run_pending()
+    weatherzone_data()
 
     # Assuming you have the values in Current_temp, Forecast_temp, uv_index_accu, and Rain_chance
 
     # Format the values based on your criteria
-    Current_temp = 38.55
-    Forecast_temp = 33.45
-    Rain_chance = 5.0
-    uv_index_accu =7.8
+    #Current_temp = 38.55
+    #Forecast_temp = 33.45
+    #Rain_chance = 5.0
+    #uv_index_accu =7.8
     current_temp_text = "{:.1f}".format(Current_temp) if Current_temp < 10 else "{:.0f}".format(Current_temp)
     forecast_temp_text = "{:.1f}".format(Forecast_temp) if Forecast_temp < 10 else "{:.0f}".format(Forecast_temp)
     uv_index_text = "{:.1f}".format(uv_index_accu) if uv_index_accu < 10 else "{:.0f}".format(uv_index_accu)
@@ -443,14 +447,30 @@ def update_weather_and_leds():
 
 
 # Create a Tkinter window
-window = tk.Tk()
-window.title("SMART WEATHER WARNING STATION")
+def check_display():
+    if 'DISPLAY' in os.environ:
+        # Display is available, use it to create a Tkinter window
+        window = tk.Tk()
+        window.title("SMART WEATHER WARNING STATION")
+        print("Using physical display")
+    else:
+        # No display available, create a virtual display using Xvfb
+        with Display():
+            window = tk.Tk()
+            window.title("SMART WEATHER WARNING STATION")
+        print("Using virtual display")
+
+# Call the check_display function once to initiate the process
+check_display()
+# Schedule check_display to run every 5 minutes
+window.after(300000, check_display)
+
 
 # Load the background image
-bg_imageN = PhotoImage(file="/home/masud/weatherboard1024x514N.png")
-bg_imageR = PhotoImage(file="/home/masud/weatherboard1024x514R.png")
-bg_imageY = PhotoImage(file="/home/masud/weatherboard1024x514Y.png")
-bg_imageG = PhotoImage(file="/home/masud/weatherboard1024x514G.png")
+bg_imageN = PhotoImage(file="/home/rubixdesign/actions-runner/_work/WeatherStation/WeatherStation/weatherboard1024x514N.png")
+bg_imageR = PhotoImage(file="/home/rubixdesign/actions-runner/_work/WeatherStation/WeatherStation/weatherboard1024x514R.png")
+bg_imageY = PhotoImage(file="/home/rubixdesign/actions-runner/_work/WeatherStation/WeatherStation/weatherboard1024x514Y.png")
+bg_imageG = PhotoImage(file="/home/rubixdesign/actions-runner/_work/WeatherStation/WeatherStation/weatherboard1024x514G.png")
 image_width = bg_imageR.width()
 image_height = bg_imageR.height()
 
