@@ -1,11 +1,17 @@
-from time import sleep
-import time
-time.sleep(30)
-import tkinter as tk
-from tkinter import PhotoImage
-from pyvirtualdisplay import Display
-
-# ... (Rest of your imports and LED configuration code)
+####################################
+##   **Smart Weather Warning Station
+##   **Rubix Design and Engineering
+##    WeatherStationFirmware_REV_A01.py(09052023DDMMYY)
+##    Current temp,forecast temp, chance of rain is taken from BoM FTP server(no legal problem)
+##    UV index taken from ARPANSA using webscrapin(check Terms and Conditions, all ok)
+##    LIGHTNING DATA FETCHING FROM WEATHERZONE.COM
+##    Previous version 12.py was webcraping based.
+##    A01>> 4LED per segment
+##    A02>> 7LED per segment(Not Tested yet 10102023)<Tested, UV not OK>
+##    A03>> loop running using while, no error handle message. Backup, GitAction, SSH control.
+##    A04>> auto kill feature added
+##    auto reboot test run: 10/28 17:00 
+## ################################
 import os
 import sys
 import RPi.GPIO as GPIO
@@ -22,7 +28,8 @@ GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
 #GPIO.output(18, GPIO.OUT)  # Turn off yellow_beacon
 #GPIO.output(18, GPIO.LOW)     # Turn off red_beacon
-
+from time import sleep
+import time
 from datetime import datetime, timedelta
 import schedule
 import requests
@@ -294,31 +301,18 @@ def weatherzone_data():
                 GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
                 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
                 GPIO.output(green_beacon, GPIO.HIGH)   # Turn ON green_beacon
-                canvas.delete(bg_imageR)
-                canvas.delete(bg_imageY)
-                canvas.delete(bg_imageN)
-                canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageG) # GREEN 
-                
                 print(f"Status attribute value: {status_value}")
                 break  # Stop searching once a "CLEAR" status is found
             elif status_value == "APPROACHING":
                 GPIO.output(green_beacon, GPIO.LOW)   # Turn off green_beacon
                 GPIO.output(red_beacon, GPIO.LOW)     # Turn off red_beacon
                 GPIO.output(yellow_beacon, GPIO.HIGH)  # Turn ON yellow_beacon
-                canvas.delete(bg_imageR)
-                canvas.delete(bg_imageY)
-                canvas.delete(bg_imageN)
-                canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageY) # YELLOW
                 print(f"Status attribute value: {status_value}")
                 break  # Stop searching once a "CLEAR" status is found
             elif status_value == "IMMINENT":
                 GPIO.output(green_beacon, GPIO.LOW)   # Turn off green_beacon
                 GPIO.output(yellow_beacon, GPIO.LOW)  # Turn off yellow_beacon
                 GPIO.output(red_beacon, GPIO.HIGH)     # Turn ON red_beacon
-                canvas.delete(bg_imageR)
-                canvas.delete(bg_imageY)
-                canvas.delete(bg_imageN)
-                canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageR) # RED
                 print(f"Status attribute value: {status_value}")
                 break  # Stop searching once a "CLEAR" status is found
             else:
@@ -395,118 +389,47 @@ def log_entry(text_to_write):
         log_file.write(text_to_write)
     log_file.close()
 
-# Check if the lock file exists
-if os.path.exists(weatherstation_lock_file):
-    # Terminate the previous instance
-    with open(weatherstation_lock_file, 'r') as f:
-        pid = int(f.read())
-        os.system(f"kill {pid}")
+try:
+    main()
+    # Check if the lock file exists
+    if os.path.exists(weatherstation_lock_file):
+        # Terminate the previous instance
+        with open(weatherstation_lock_file, 'r') as f:
+            pid = int(f.read())
+            os.system(f"kill {pid}")
 
-weatherstation_lock_file = "/tmp/weatherstation.lock"
-# Create a new lock file with the current process ID
-with open(weatherstation_lock_file, 'w') as f:
-    f.write(str(os.getpid()))
-    
-# Create a function to update the weather data and LEDs
-main()
-update_uv_index()
-def update_weather_and_leds():
-    get_data()
+    # Create a new lock file with the current process ID
+    with open(weatherstation_lock_file, 'w') as f:
+        f.write(str(os.getpid()))
+    #rgb_test()
+    #main()
     #update_uv_index()
-    schedule.run_pending()
-    weatherzone_data()
-
-    # Assuming you have the values in Current_temp, Forecast_temp, uv_index_accu, and Rain_chance
-
-    # Format the values based on your criteria
-    #Current_temp = 38.55
-    #Forecast_temp = 33.45
-    #Rain_chance = 5.0
-    #uv_index_accu =7.8
-    current_temp_text = "{:.1f}".format(Current_temp) if Current_temp < 10 else "{:.0f}".format(Current_temp)
-    forecast_temp_text = "{:.1f}".format(Forecast_temp) if Forecast_temp < 10 else "{:.0f}".format(Forecast_temp)
-    uv_index_text = "{:.1f}".format(uv_index_accu) if uv_index_accu < 10 else "{:.0f}".format(uv_index_accu)
-    rain_chance_text = "{:.1f}".format(Rain_chance) if Rain_chance < 10 else "{:.0f}".format(Rain_chance)
-
-    # Update labels with the new values
-    labels[0].config(text=current_temp_text)
-    labels[1].config(text=forecast_temp_text)
-    labels[2].config(text=uv_index_text)
-    labels[3].config(text=rain_chance_text)
-
-
-    # Update LED display based on the new values
-    send_Data(Current_temp,  0, 50)  # Update digit group 1
-    send_Data(Forecast_temp, 99, 149)  # Update digit group 2
-    send_Data(uv_index_accu, 198, 248)  # Update digit group 3
-    send_Data(Rain_chance, 297, 347)  # Update digit group 4
-    strip.show()
-    # Schedule the next update in 5 minutes
-    window.after(300000, update_weather_and_leds)
-
-
-
-# Create a Tkinter window
-def check_display():
-    if 'DISPLAY' in os.environ:
-        # Display is available, use it to create a Tkinter window
-        window = tk.Tk()
-        window.title("SMART WEATHER WARNING STATION")
-        print("Using physical display")
-    else:
-        # No display available, create a virtual display using Xvfb
-        with Display():
-            window = tk.Tk()
-            window.title("SMART WEATHER WARNING STATION")
-        print("Using virtual display")
-
-# Call the check_display function once to initiate the process
-check_display()
-# Schedule check_display to run every 5 minutes
-window.after(300000, check_display)
-
-
-# Load the background image
-bg_imageN = PhotoImage(file="/home/rubixdesign/actions-runner/_work/WeatherStation/WeatherStation/weatherboard1024x514N.png")
-bg_imageR = PhotoImage(file="/home/rubixdesign/actions-runner/_work/WeatherStation/WeatherStation/weatherboard1024x514R.png")
-bg_imageY = PhotoImage(file="/home/rubixdesign/actions-runner/_work/WeatherStation/WeatherStation/weatherboard1024x514Y.png")
-bg_imageG = PhotoImage(file="/home/rubixdesign/actions-runner/_work/WeatherStation/WeatherStation/weatherboard1024x514G.png")
-image_width = bg_imageR.width()
-image_height = bg_imageR.height()
-
-# Create a canvas to display the background image
-canvas = tk.Canvas(window, width=image_width, height=image_height)
-canvas.pack()
-
-# Display the background image
-canvas.create_image(0, 0, anchor=tk.NW, image=bg_imageN)
-
-# Create labels with the formatted variables
-labels = [
-    tk.Label(window, text="", font=("Digital-7", 60), fg="red", bg="white"),
-    tk.Label(window, text="", font=("Digital-7", 60), fg="red", bg="white"),
-    tk.Label(window, text="", font=("Digital-7", 60), fg="red", bg="white"),
-    tk.Label(window, text="", font=("Digital-7", 60), fg="red", bg="white"),
-]
-
-# Calculate label positions
-text_positions = [
-    (((image_width / 4 - len(labels[0]['text']) * 10) / 2) , (image_height / 4) * 3),
-    ((image_width / 4 * 3 - len(labels[1]['text']) * 10) / 2, (image_height / 4) * 3),
-    ((image_width / 4 * 5 - len(labels[2]['text']) * 10) / 2, (image_height / 4) * 3),
-    ((image_width / 4 * 7 - len(labels[3]['text']) * 10) / 2, (image_height / 4) * 3),
-]
-
-# Place the labels in their respective positions
-for label, (x, y) in zip(labels, text_positions):
-    label.place(x=x, y=y)
-
-
-# Disable window resizing
-window.resizable(False, False)
-
-# Call the update function to initialize the data and LEDs
-update_weather_and_leds()
-
-# Start the GUI main loop
-window.mainloop()
+  
+    i=1
+    #while i>0:
+        
+    while i>0:
+      #print("RGB Running")
+      #rgb_test()
+      check_internet_connection()
+      get_data() 
+      #schedule.run_pending()
+      weatherzone_data()
+      print(datetime.now()) 
+      print("First Digit Current_temp:")
+      print(Current_temp)
+      send_Data(Current_temp,0,50) # digit group 1
+      print("Second Digit Forecast_temp:")
+      print(Forecast_temp)
+      send_Data(Forecast_temp,99,149) # digit group 2
+      print("Third Digit UV_Index_accu:")
+      print(uv_index_accu)
+      send_Data(uv_index_accu,198,248) # digit group 3
+      print("Forth Digit Rain_chance:")
+      print(Rain_chance)
+      send_Data(Rain_chance,297,347) # digit group 4
+      strip.show()
+      sleep(300)
+finally:
+    # Remove the lock file when the program exits (both normally and due to exceptions)
+    os.remove(weatherstation_lock_file)
