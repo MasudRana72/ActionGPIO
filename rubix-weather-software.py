@@ -411,10 +411,10 @@ try:
     while i>0:
       #print("RGB Running")
       #rgb_test()
-      check_internet_connection()
-      get_data() 
+      #heck_internet_connection()
+      #get_data() 
       #schedule.run_pending()
-      weatherzone_data()
+      #weatherzone_data()
       print(datetime.now()) 
       print("First Digit Current_temp:")
       print(Current_temp)
