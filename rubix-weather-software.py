@@ -43,6 +43,10 @@ try:
         for alert_element in root.iter("alert"):
             status_value = alert_element.get("status")
             print(f"Status attribute value: {status_value}")
+            # Open the file in append mode
+            with open("/home/masud/statuslog.txt", "a") as file:
+                # Write the variable to the file followed by a newline character
+                file.write(str(status_value) + "\n")
             if status_value == "CLEAR":
                 print(f"Status attribute value: {status_value}")
                 break  # Stop searching once a "CLEAR" status is found
@@ -50,6 +54,10 @@ try:
             else:
                 
                 print("No alert with status=\"CLEAR\" found in the XML.")
+                # Open the file in append mode
+                with open("/home/masud/statuslog.txt", "a") as file:
+                    # Write the variable to the file followed by a newline character
+                    file.write(str(status_value) + "\n")
 
     else:
         print(f"Failed to retrieve data. Status code: {response.status_code}")
