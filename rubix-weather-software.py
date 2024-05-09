@@ -61,7 +61,6 @@ while True:
 
     else:
         print(f"Failed to retrieve data. Status code: {response.status_code}")
-    time.sleep(30)
+    sleep(30)
 
-except requests.exceptions.RequestException as e:
-    print(f"An error occurred: {e}")
+
