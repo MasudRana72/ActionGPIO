@@ -28,7 +28,7 @@ generated_key = generate_key(weatherzone_password)
 print(generated_key)
 url_weatherzone = url_weatherzone +"&u=" + weatherzone_userid + "&k=" +generated_key
 #print(url_weatherzone)
-try:
+while True:
     response = requests.get(url_weatherzone)
 
     if response.status_code == 200:
@@ -61,7 +61,7 @@ try:
 
     else:
         print(f"Failed to retrieve data. Status code: {response.status_code}")
-
+    time.sleep(30)
 
 except requests.exceptions.RequestException as e:
     print(f"An error occurred: {e}")
