@@ -1,5 +1,6 @@
 import requests
 import xml.etree.ElementTree as ET
+import time
 
 url_weatherzone = "https://ws.weatherzone.com.au/?lt=uwas&lc=7027&locdet=1&latlon=1&alerts=1(client=393,type=lightning)&format=xml"
 import hashlib
@@ -61,6 +62,6 @@ while True:
 
     else:
         print(f"Failed to retrieve data. Status code: {response.status_code}")
-    sleep(30)
 
 
+    time.sleep(30)
