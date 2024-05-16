@@ -53,6 +53,10 @@ while True:
                 break  # Stop searching once a "CLEAR" status is found
 
             else:
+                # Open the file in append mode
+                with open("/home/masud/statuslogClear.txt", "a") as file:
+                    # Write the variable to the file followed by a newline character
+                    file.write(str(status_value) + "\n")
                 
                 print("No alert with status=\"CLEAR\" found in the XML.")
                 # Open the file in append mode
@@ -64,4 +68,4 @@ while True:
         print(f"Failed to retrieve data. Status code: {response.status_code}")
 
 
-    time.sleep(30)
+    time.sleep(300)
