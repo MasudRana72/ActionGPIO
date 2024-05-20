@@ -5,7 +5,6 @@ from datetime import datetime
 import os
 import RPi.GPIO as GPIO
 import time
-import subprocess
 
 # Suppress GPIO warnings
 GPIO.setwarnings(False)
@@ -86,14 +85,11 @@ def weatherzone_data():
     except requests.RequestException as e:
         print(f"Failed to retrieve data: {e}")
         turn_off_all_beacons()
-        display_message("Failed to retrieve data. Beacons turned off.")
 
 def turn_off_all_beacons():
     for beacon in beacons:
         GPIO.output(beacon, GPIO.LOW)
 
-def display_message(message):
-    subprocess.run(['bash', '-c', f'DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send "Alert" "{message}"'])
 
 while True:
     if check_internet_connection():
@@ -102,6 +98,5 @@ while True:
     else:
         print("No internet connection. Turning off all beacons.")
         turn_off_all_beacons()
-        display_message("No internet connection. Beacons turned off.")
 
-    time.sleep(1)
+    time.sleep(120)
