@@ -55,6 +55,7 @@ def weatherzone_data():
 
         for alert_element in root.iter("alert"):
             status_value = alert_element.get("status")
+            print(f"STATUS: {status_value}")
             if status_value == "CLEAR":
                 GPIO.output(R1_beacon, GPIO.LOW)
                 GPIO.output(yellow_beacon, GPIO.LOW)

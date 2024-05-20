@@ -24,8 +24,8 @@ for beacon in beacons:
     GPIO.setup(beacon, GPIO.OUT)
     GPIO.output(beacon, GPIO.LOW)  # Turn off all beacons initially
 
-weatherzone_userid = "************"
-weatherzone_password = "*******"
+weatherzone_userid = "103173-9077"
+weatherzone_password = "sap9VAgH"
 
 def generate_key(weatherzone_password):
     today = datetime.now().strftime("%d/%m/%y")
