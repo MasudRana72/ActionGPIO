@@ -99,4 +99,4 @@ while True:
         print("No internet connection. Turning off all beacons.")
         turn_off_all_beacons()
 
-    time.sleep(120)
+    time.sleep(1)
