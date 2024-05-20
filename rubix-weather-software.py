@@ -104,4 +104,4 @@ while True:
         turn_off_all_beacons()
         display_message("No internet connection. Beacons turned off.")
 
-    time.sleep(60)
+    time.sleep(1)
