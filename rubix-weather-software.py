@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import RPi.GPIO as GPIO
 import time
+import subprocess
 
 # Suppress GPIO warnings
 GPIO.setwarnings(False)
@@ -92,7 +93,7 @@ def turn_off_all_beacons():
         GPIO.output(beacon, GPIO.LOW)
 
 def display_message(message):
-    os.system(f'notify-send "Alert" "{message}"')
+    subprocess.run(['bash', '-c', f'DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send "Alert" "{message}"'])
 
 while True:
     if check_internet_connection():
